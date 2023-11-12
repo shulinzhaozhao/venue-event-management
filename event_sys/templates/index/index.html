@@ -1,0 +1,114 @@
+{% extends "index/base.html" %}
+
+{% block title %}Plan-It Right Event Management{% endblock %}
+
+
+{% block main %}
+<!-- search box section -->
+
+
+<div class="search-box-container">
+    <div class="search-box-title">
+        <h1 class="text-center">Find the Best Venue for Your</h1> 
+        <h1><span id="typed-text"></span><span id="cursor"></span></h1>
+    </div>
+    <form action="/search_venues" method="post">
+    <div class="search-box">
+        <div class="form-group">
+          <label for="event-type" style="font-size: smaller; margin: 0 0 8px 13px;">EVENT TYPE</label>
+          <input type="text" class="form-control" id="event-type" name="event-type" placeholder="Wedding" required> 
+          
+        </div>
+        <div class="form-group">
+          <label for="guests" style="font-size: smaller; margin: 0 0 8px 13px;">GUESTS</label>
+          <input type="text" class="form-control" id="guests" name="guests" placeholder="35" required>
+   
+        </div>
+        <div class="form-group" style="border: none;">
+          <label for="location" style="font-size: smaller; margin: 0 0 8px 13px;">LOCATION</label>
+          <input type="text" class="form-control" id="location" name="location" placeholder="Auckland" required>
+  
+        </div>
+        <button type="submit" class="btn btn-primary" 
+        style="
+        color: white; font-weight: bold; 
+        border: none; margin-left: 7px;">
+            Search
+        </button>
+    </div>
+    </form>
+</div>
+
+
+<!-- search box title JS -->
+<script>
+    const words = ['Wedding', 'Anniversary', 'Meeting', 'Workshop', 'Conference', 'Exhibition'];
+    let currentIndex = 0;
+
+    function typeNextWord() {
+    const typedText = document.getElementById('typed-text');
+    const cursor = document.getElementById('cursor');
+
+    if (currentIndex >= words.length) {
+        currentIndex = 0;
+    }
+
+    const currentWord = words[currentIndex];
+    let i = 0;
+
+    const interval = setInterval(() => {
+        if (i === currentWord.length) {
+        clearInterval(interval);
+        setTimeout(() => {
+            currentIndex++;
+            wipeCurrentWord();
+            cursor.style.animation = 'blink-caret 0.8s step-end infinite'; // Restart cursor blinking
+        }, 2000);
+        return;
+        }
+
+        typedText.innerText += currentWord[i];
+        i++;
+    }, 200);
+    }
+
+    function wipeCurrentWord() {
+    const typedText = document.getElementById('typed-text');
+    const cursor = document.getElementById('cursor');
+
+    const currentWord = typedText.innerText;
+    let i = currentWord.length - 1;
+
+    const interval = setInterval(() => {
+        if (i < 0) {
+        clearInterval(interval);
+        setTimeout(() => {
+            typeNextWord();
+            cursor.style.animation = 'blink-caret 0.8s step-end infinite'; // Restart cursor blinking
+        }, 1500);
+        return;
+        }
+
+        typedText.innerText = currentWord.substring(0, i);
+        i--;
+    }, 80);
+    }
+
+    setTimeout(wipeCurrentWord, 0);
+
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+

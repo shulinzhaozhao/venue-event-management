@@ -1,0 +1,110 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Admin Add a Venue{% endblock %}
+
+{% block main %}
+
+<div class="container">
+  
+  <!-- Venue Information Form -->
+  <form method="POST" action="/admin/manage_venues/add" enctype="multipart/form-data">
+    <div class="row row-cols-1 row-cols-md-2 g-3">
+      <div class="col-md-7">
+        <h3 class="text-uppercase pb-1 mt-3 mb-1 title-text">
+          <input type="text" name="venue_name" placeholder="Venue Name" required>
+        </h3>
+        <h5 class="text-muted mb-4">
+          <input type="text" name="city" placeholder="City" required>
+        </h5>
+        <p class="me-4">
+          <textarea name="description" rows="8" cols="50" placeholder="A description of the venue" required></textarea>
+        </p>
+      </div>
+      <div class="col-md-5">
+        <div id="gallery-carousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <!-- Your image carousel code here -->
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#gallery-carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class a="carousel-control-next" type="button" data-bs-target="#gallery-carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+
+  <!-- Contact Information Form -->
+  
+    
+    <div class="container py-3">
+      <h4 class="mb-3 title-text">Contact</h4>
+      <hr class="hr hr-blurry" />
+      <input type="tel" name="contact_phone" placeholder="Venue Contact Number" required>
+      <input type="email" name="contact_email" placeholder="Venue Email Address" required>
+      <input type="text" name="address" size="50" placeholder="Venue Physcial Address" required>
+    </div>
+
+    
+  
+  <!-- Facilities Form -->
+  
+  <div class="container-fluid py-3">
+    <h4 class="mb-3 title-text">Facilities</h4>
+    <hr class="hr hr-blurry" />
+    <div class="row mb-0">
+      {% for i in range(12) %}
+      <div class="col-4">
+        <p class="mb-0">
+          <input type="text" name="facilities[]" class="facility-input" placeholder="Facility {{ i + 1 }}">
+        </p>
+      </div>      
+      {% endfor %}
+    </div>
+  </div>
+  
+
+  <!-- Service Options Form -->
+  <div class="container py-3">
+    <h4 class="mb-3 title-text">Service Options</h4>
+    <hr class="hr hr-blurry" />
+    <p>Note: Pricing model for Catering is Per Head. All the other options are fixed price. </p>
+    {% for service in service_list %}
+      <div class="row">
+        <div class="col-6">
+          <div class="form-check">
+            <input type="checkbox" name="service_option[]" value="{{ service[0] }}">
+            <label class="form-check-label" for="{{ service[0] }}">{{ service[1] }}</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <input type="number" name="service_price[]" placeholder="Price" step = 1 min = 10 max = 1000>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  
+  
+    <button type="submit" class="btn btn-primary">Save Venue Information</button>
+  </form>
+
+</div>
+<script>
+    // Enable/disable price input based on checkbox state
+    const checkboxes = document.querySelectorAll('.service-checkbox');
+    const priceInputs = document.querySelectorAll('.service-price-input');
+  
+    checkboxes.forEach((checkbox, index) => {
+      checkbox.addEventListener('change', () => {
+        const isChecked = checkbox.checked;
+        priceInputs[index].disabled = !isChecked;
+      });
+    });
+  </script>
+
+    
+{% endblock %}

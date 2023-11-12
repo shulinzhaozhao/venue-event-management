@@ -1,0 +1,44 @@
+<!-- reminder_page.html -->
+{% extends "customers/base.html" %}
+
+{% block title %}Reminder Page{% endblock %}
+
+{% block main %}
+<div class="container" style="margin-top: 200px;">
+    <h3 class="text-dark title-text mb-5">Cancellation and Refund Policy</h3>
+
+    <p>
+        We understand that plans may change. Our cancellation and refund policy is as follows:
+    </p>
+
+    <ul>
+        <li>Cancellations made 7 days before the event: Full refund</li>
+        <li>Cancellations made 3-6 days before the event: 50% refund</li>
+        <li>No refunds for cancellations made within 48 hours of the event</li>
+    </ul>
+
+    <div class="mt-3">
+        <label>
+            <input type="checkbox" id="agreeCheckbox"> I agree to the cancellation and refund policy.
+        </label>
+    </div>
+
+    <div class="mt-3">
+        <button id="confirmPayment" class="btn btn-primary">Confirm and Pay</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('confirmPayment').addEventListener('click', function () {
+        if (document.getElementById('agreeCheckbox').checked) {
+            // If the checkbox is checked, proceed with the payment
+            // Redirect to the process booking page
+            window.location.href = "/customer/process-booking";
+        } else {
+            // Show a message or take appropriate action if the checkbox is not checked
+            alert("Please agree to the cancellation and refund policy before proceeding.");
+        }
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "planners/base.html" %}
+
+{% block title %}Planner Send Message{% endblock %}
+
+{% block main %}
+<div class="container">
+  <form method="POST" action="/planner_send_message">
+    <div class="form-group">
+      <label for="recipient">Recipient:</label>
+      <select id="recipient" name="recipient">
+        <option value="all">All Customers</option>
+        <!-- Add options for specific customers here -->
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="subject">Subject:</label>
+      <textarea id="message" name="subject" class="form-control" rows="1" required></textarea>
+    </div>
+    <div class="form-group" style="margin-bottom: 20px;"> <!-- Added margin to create a gap -->
+      <label for="message">Message Body:</label>
+      <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" style="width: 120px; margin-right: 10px;">Send</button>
+    <a href="planner_messages" class="btn btn-secondary" style="width: 120px;">Back</a>
+  </form>
+</div>
+{% endblock %}
+
+
+
+
+

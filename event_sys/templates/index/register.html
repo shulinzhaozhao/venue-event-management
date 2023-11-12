@@ -1,0 +1,54 @@
+{% extends "index/base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block main %}
+<div class="text-center">
+  <main class="form-signin">
+    <form action="{{ url_for('register') }}" method="post">
+      <h1 class="h3 mb-3 fw-normal" style="color: white;">Register</h1>
+
+      <div class="form-floating my-2">
+        <input type="text" class="form-control rounded" id="floatingInput" placeholder="Username" name="username" required pattern=".{5,15}" title="Username must be 5 to 15 characters long">
+        <label for="floatingInput">Username</label>
+      </div>
+      <div class="form-floating my-2">
+        <input type="password" class="form-control rounded" id="floatingPassword" placeholder="Password" name="password" required pattern=".{5,15}" title="Password must be 5 to 15 characters long">
+        <label for="floatingPassword">Password</label>
+      </div>
+
+      <div class="form-floating my-2">
+        <input type="email" class="form-control rounded" id="floatingEmail" placeholder="Email" name="email" required>
+        <label for="floatingEmail">Email</label>
+      </div>
+
+      <div class="form-floating my-2">
+        <input type="text" class="form-control rounded" id="floatingFirstName" placeholder="First Name" name="first_name" required>
+        <label for="floatingFirstName">First Name</label>
+      </div>
+      
+      <div class="form-floating my-2">
+        <input type="text" class="form-control rounded" id="floatingLastName" placeholder="Last Name" name="last_name" required>
+        <label for="floatingLastName">Last Name</label>
+      </div>
+
+      <div class="form-floating my-2">
+        <textarea class="form-control rounded" id="floatingAddress" placeholder="Address" name="address" rows="2" ></textarea>
+        <label for="floatingAddress">Address</label>
+      </div>
+      
+      <div class="form-floating my-2">
+        <input type="tel" class="form-control rounded" id="floatingPhone" placeholder="contact_number" name="contact_number">
+        <label for="floatingPhone">Phone</label>
+      </div>
+
+      <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+      <p style="padding: 15px 0 0 0; font-size: small; color: white;">Already a member? 
+        <a href="sign-in" style="color: rgb(245,251,66); text-decoration: none;">
+          Sign In here.</a></p>
+
+    </form>
+  </main>
+</div>
+{% endblock %}
+

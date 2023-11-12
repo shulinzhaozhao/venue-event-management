@@ -1,0 +1,93 @@
+{% extends "planners/base.html" %}
+
+{% block title %}Planner Dashboard{% endblock %}
+
+{% block main %}
+
+<!-- <h6>planner's venue info</h6>{{planner_s_venue_info}} -->
+
+<form action="{{ url_for('handle_venue_selection')}}" method="post">
+
+    <div style="margin-left:10px; margin-top: 50px;">
+        <label for="venueSelect">Select a Venue:</label>
+        <select name='selected_venue_id' id="venueSelect" class="form-select" aria-label="Small select example"
+            style="width: 400px;">
+            {% for row in planner_s_venue_info %}
+            <option value="{{row[0]}}">VenueID_{{row[0]}} : {{row[1]}}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px; margin-left: 10px;">
+                Check Events in the Venue
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- 
+<div id="calendar" class="my-calendar" style="margin-top: 50px;"></div>
+
+<script>
+    // planner calendar
+    document.addEventListener('DOMContentLoaded', function () {
+        let calendarElement = document.getElementById('calendar');
+        let calendar = new FullCalendar.Calendar(calendarElement, {
+            // eventColor: '#378006', //change all eventColor
+
+            nextDayThreshold: '09:00:00',
+
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'timeGridWeek, dayGridMonth, listYear'
+            },
+
+            events: [
+                {% for e in events %}
+            {
+                title: '{{ e.title }}',
+                start: '{{ e.start }}',
+                end: '{{ e.end }}',
+                color: getColorForEventType('{{ e.title }}'),
+                description: '{{ e.description|safe}}'//use the safe filter to tell Jinja not to escape the HTML(handle the "&amp;")
+            },
+            {% endfor %}
+        ],
+
+        eventClick: function (info) {
+            const description = info.event.extendedProps.description;
+            alert('Event: ' + info.event.title + '\nDescription: ' + description);
+            // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+            // alert('View: ' + info.view.type);
+
+            // change the border color just for fun
+            info.el.style.borderColor = 'red';
+        }
+    });
+
+    function getColorForEventType(title) {
+        if (title === 'Conference') {
+            return '#9A3B3B';
+        } else if (title === 'Corporate Event') {
+            return '#35A29F';
+        } else if (title === 'Corporate Meeting') {
+            return '#071952';
+        } else if (title === 'Exhibition') {
+            return '#451952';
+        } else if (title === 'Private Event') {
+            return '#662549';
+        } else if (title === 'Wedding') {
+            return '#AE445A';
+        } else {
+            return '#F39F5A'
+        }
+    }
+
+    calendar.render();
+});
+</script> -->
+
+{% endblock %}

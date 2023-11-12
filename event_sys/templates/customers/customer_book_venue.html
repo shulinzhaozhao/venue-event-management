@@ -1,0 +1,105 @@
+{% extends "customers/base.html" %}
+
+{% block title %}Book Venue{% endblock %}
+
+{% block main %}
+
+<!-- Test Code: -->
+<!-- {{venue_info}}
+<hr>
+{{space_info}} -->
+
+<div class="container" style="margin-top: 50px;">
+    <h3 class="text-dark title-text mb-5">Book an Event</h3>
+
+    <form class="row g-3" action="/customer/review-booking" method="post">
+        <!-- hidden info -->
+        <input type="hidden" name="venue_id" value="{{ venue_id }}">
+        <input type="hidden" name="space_id" value="{{ space_id }}">
+
+        <!-- Venue Information: -->
+        <div class="col-6">
+            <label class="form-label">Venue name</label>
+            <input type="text" class="form-control"  name='venue' value="{{ venue_info[0] }} " readonly
+                >
+        </div>
+
+        <!-- Space Information: -->
+        <div class="col-6">
+            <label class="form-label">Space name</label>
+            <input type="text" class="form-control" name='space' value="{{ space_info[0] }} " readonly
+                >
+        </div>
+
+        <!-- Event Type: -->
+        <div class="col-6">
+            <label class="form-label"><span style="color: red;">*</span>Event type</label>
+            <select class="form-select" name="event_type" required>
+                <option disabled  value="">...Select Event Type...</option>
+                {% for event_option in event_options%}
+                <option value="{{ event_option }}"> {{ event_option }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Number of Guests: -->
+        <div class="col-6">
+            <label class="form-label"><span style="color: red;">*</span>Number of guests</label>
+            <input type="number" name="number_of_guests" class="form-control" 
+                    min="5" max="{{space_info[1]}}" 
+                    placeholder="Range of guest number: 5 to {{space_info[1]}}"
+                     required>
+        </div>
+
+        <!-- Date and Time: -->
+        <div class="col-md-6">
+            <label class="form-label"><span style="color: red;">*</span>From (date & time)</label>
+            <input type="datetime-local" class="form-control" name="start" id="startDateTime" min="{{current_datetime}}" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label"><span style="color: red;">*</span>To (date & time)</label>
+            <input type="datetime-local" class="form-control" id="endDateTime" name="end" required>
+        </div>
+
+        <!-- Validate -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var startInput = document.getElementById('startDateTime');
+                var endInput = document.getElementById('endDateTime');
+        
+                startInput.addEventListener('input', function () {
+                    // Update the min attribute of the end input to be at least the value of the start input
+                    endInput.min = startInput.value;
+                });
+            });
+        </script>
+
+
+        <!-- Services: -->
+        <div class="col-md-12 mb-0">
+            <label class="form-label"><span style="color: red;">*</span>Services</label>
+            <div class="row">
+                {% for service_option in venue_info[5] %}
+                <div class="col-md-4 mt-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="services[]" value="{{ service_option }}"
+                            id="{{ service_option }}">
+                        <label class="form-check-label" for="{{ service_option }}">
+                            {{ service_option }}
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Calculate Rate and Review Booking</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends "customers/base.html" %}
+
+<!-- passing in  
+
+booking_info: 
+[250, 
+[(1, 'Catering'), (2, 'Catering Staffing'), (3, 'Security'), (4, 'Styling'), (5, 'Cleaning'), (10, 'MC')], 
+'Test Booking 4: a long event', 
+Decimal('17278.00'), 'John', 'Doe', 'customer1', max_cap,
+(7, 'Exhibition'), 'Great Hall', 
+'2023-10-08 09:00', '2023-10-18 21:00', 'Wow Factor']
+
+
+
+-->
+
+
+
+{% block title %}Edit Bookings{% endblock %}
+
+{% block main %}
+
+
+<div class="container">
+    <h3 class="text-dark title-text mb-5">Edit Booked Events</h3>
+    <form class="row g-3" action="/customer/review_edited_booking" method="post">
+        <!-- hidden info -->
+        <input type="hidden" name="venue_id" value="{{ booking_info[-2] }}">
+        <input type="hidden" name="space_id" value="{{ booking_info[-1] }}">
+        <input type="hidden" name="booking_id" value="{{ booking_id }}">
+
+
+        <div class="col-md-6">
+          <label for="inputName" class="form-label">Customer name</label>
+          <input type="text" class="form-control disabled" id="inputName" value="{{ booking_info[4] }} {{ booking_info[5] }}" readonly>
+        </div>
+        <div class="col-md-6">
+          <label for="inputUsername" class="form-label">Username</label>
+          <input type="text" class="form-control disabled" id="inputUsername" value="{{ booking_info[6] }}" readonly>
+        </div>
+        <div class="col-md-6">
+          <label for="inputVenue" class="form-label">Venue name</label>
+          <input type="text" class="form-control disabled" id="inputVenue" name='venue' value=" {{booking_info[-3]}} " readonly>
+        </div>
+        <div class="col-md-6">
+          <label for="inputSpace" class="form-label">Space name</label>
+          <input type="text" class="form-control disabled" id="inputSpace" name='space' value=" {{booking_info[9]}} " readonly>
+        </div>
+
+        <div class="col-md-6">
+          <label for="inputEvent" class="form-label"><span style="color: red;">*</span>Event type</label>
+          <select class="form-select" id="inputEvent" name="event_type" required>
+            {% for option in event_options %}
+              <option value="{{option}}"
+              {% if booking_info[8][1] == option  %} selected
+              {% endif %}> 
+              {{ option }} </option>
+            {% endfor %}
+          </select>
+        </div>
+
+
+        <div class="col-6">
+          <label class="form-label"><span style="color: red;">*</span>Number of guests</label>
+          <input type="number" name="number_of_guests" class="form-control" min="5" max="{{booking_info[7]}}" placeholder="{{booking_info[0]}}" required>
+        </div>
+
+        <!-- <div class="col-md-6">
+          <label for="selectStart" class="form-label"><span style="color: red;">*</span>From (date & time)</label>
+          <input type="datetime-local" class="form-control" id="selectStart" name="start" min="{{current_datetime}}" required>
+        </div>
+        <div class="col-md-6">
+            <label for="selectEnd" class="form-label"><span style="color: red;">*</span>To (date & time)</label>
+            <input type="datetime-local" class="form-control" id="selectEnd"  name="end" required>
+        </div> -->
+
+        <!-- Date and Time: -->
+        <div class="col-md-6">
+          <label class="form-label"><span style="color: red;">*</span>From (date & time)</label>
+          <input type="datetime-local" class="form-control" name="start" id="startDateTime" min="{{current_datetime}}" required>
+      </div>
+      <div class="col-md-6">
+          <label class="form-label"><span style="color: red;">*</span>To (date & time)</label>
+          <input type="datetime-local" class="form-control" id="endDateTime" name="end" required>
+      </div>
+
+      <!-- Validate -->
+      <script>
+          document.addEventListener('DOMContentLoaded', function () {
+              var startInput = document.getElementById('startDateTime');
+              var endInput = document.getElementById('endDateTime');
+      
+              startInput.addEventListener('input', function () {
+                  // Update the min attribute of the end input to be at least the value of the start input
+                  endInput.min = startInput.value;
+              });
+          });
+      </script>
+
+
+
+
+        <div class="col-md-12 mb-2">
+          <label class="form-label"><span style="color: red;">*</span>Services</label>
+          <div class="row">
+            {% for service_option in venue_info[5] %}
+                <div class="col-md-4 mt-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="services[]" value="{{ service_option }}"
+                            id="{{ service_option }}"
+                          {% for service_booked in booking_info[1] %}
+                            {% if service_booked[1] == service_option %}
+                              checked
+                            {% endif %}
+                          {% endfor %}>
+                        <label class="form-check-label" for="{{ service_option }}">
+                            {{ service_option }}
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+          </div>
+      </div>
+
+
+
+
+          <!-- <div class="col-md-12">
+            <label for="inputCharge" class="form-label">Total charge</label>
+            <input type="text" class="form-control" id="inputCharge" placeholder="${{ booking_info[3] }}" readonly>
+          </div> -->
+
+        
+          <!-- <div class="col-md-12">
+            <label for="inputMessage" class="form-label">Other requirements</label>
+            <input type="text" class="form-control" id="inputMessage" placeholder="{{ booking_info[2] }}">
+          </div> -->
+        
+
+
+        <div class="col-4">
+          <button type="submit" class="btn btn-primary">Calculate Rate and Review Booking</button>
+        </div>
+        <div class="col-4">
+          <a href="/customer/delete_booking/{{ booking_id }}" class="btn btn-outline-primary" 
+          onclick="return confirm('Are you sure you want to delete this booking?')">Delete Booking</a>
+        </div>
+
+
+      </form>
+      <!-- <div class="col-6">
+      <a href="/customer/delete_booking/{{ booking_id }}" class="btn btn-outline-primary" 
+      onclick="return confirm('Are you sure you want to delete this booking?')">Delete Booking</a>
+    </div> -->
+</div>
+
+
+
+
+
+
+{% endblock %}

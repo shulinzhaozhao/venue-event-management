@@ -1,0 +1,45 @@
+{% extends "customers/base.html" %}
+
+{% block title %}Manage Bookings{% endblock %}
+
+{% block main %}
+
+<!-- 
+upcoming_event_list, past_event_list
+passed in
+-->
+
+<div class="container">
+    <h3 class="text-dark title-text mb-5">Manage Bookings</h3>
+
+    <div class="container-fluid mb-5">
+    <h5 class="mb-3">Upcoming Events</h5>
+    <div class="list-group">
+      {% for event in upcoming_event_list %}
+        <a href="/customer/booking_detail/{{event[0]}}" class="list-group-item list-group-item-action">
+        <!-- <a href="/customer/booking_detail" class="list-group-item list-group-item-action active" aria-current="true"> -->
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ event[10] }} at {{ event[8] }}, {{ event[9] }} </h5>
+            <small>Booked at {{ event[1] }}</small>
+          </div>
+          <p class="mb-2  text-muted">{{ event[2] }} guests, from {{ event[-2] }} to {{ event[-1] }}.</p>
+          <!-- <small>And some small print.</small> -->
+        </a>
+      {% endfor %}
+    </div>
+    </div>
+
+    <div class="container-fluid mb-5">
+      <h5 class="mb-3">Past Events</h5>
+      <ul class="list-group">
+        {% for event in past_event_list %}
+        <li class="list-group-item disabled">{{ event[10] }} at {{ event[8] }}, {{ event[9] }}, {{ event[-2][:10] }}   </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+
+</div>
+
+
+{% endblock %}

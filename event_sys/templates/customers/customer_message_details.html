@@ -1,0 +1,21 @@
+{% extends "planners/base.html" %}
+{% block title %}Message Details{% endblock %}
+{% block main %}
+<div class="container">
+  <h2>Message Details</h2>
+  <dl class="row">
+    <dt class="col-sm-3">Message Date:</dt>
+    <dd class="col-sm-9">{{ message_details[0] }}</dd>
+    
+    <dt class="col-sm-3">Subject:</dt>
+    <dd class="col-sm-9">{{ message_details[1] }}</dd>
+    
+    <dt class="col-sm-3">Message Body:</dt>
+    <dd class="col-sm-9">{{ message_details[2] }}</dd>
+  </dl>
+
+  <!-- Back button to navigate back to the previous page -->
+  <a href="/customer_messages" class="btn btn-secondary">Back</a>
+</div>
+{% endblock %}
+

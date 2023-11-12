@@ -1,0 +1,143 @@
+{% extends "public/base.html" %}
+
+{% block title %}Individual Venue Page{% endblock %}
+
+{% block main %}
+
+<div class="container">
+  <div class="row row-cols-1 row-cols-md-2 g-3">
+    <div class="col-md-7">
+      <h3 class="text-uppercase pb-1 mt-3 mb-1 title-text">{{ venue_info[0] }}</h3>
+      <h5 class="text-muted mb-4">{{ venue_info[1] }}</h5>
+      <!-- <h4 class="mb-3 title-text">Description</h4>
+      <hr class="hr hr-blurry" /> -->
+      <p class="me-4">{{ venue_info[3] }}</p>
+    </div>
+
+    <div class="col-md-5">
+      <div id="gallery-carousel" class="carousel slide" data-bs-ride="carousel">
+        <!-- <div class="carousel-indicators">
+          {% set index = 0 %}
+          {% for entry in venue_info[2] %}
+          <button type="button" data-bs-target="#gallery-carousel" 
+          data-bs-slide-to="{{ index }}" 
+          {% if index == 0 %} class="active" {% endif %} 
+          aria-current="{{ 'true' if index == 0 else 'false' }}" 
+          aria-label="Slide {{ index+1 }}"></button>
+          {% set index = index + 1 %}
+          {% endfor %}
+        </div> -->
+        <div class="carousel-inner">
+          {% for entry in venue_info[2] %}
+          <div class="carousel-item active">   
+            <img src="{{ url_for('static', filename = entry) }}" class="d-block w-100" alt="image">
+          </div>
+          {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#gallery-carousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#gallery-carousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <div class="container py-3">
+    <div class="row row-cols-1 row-cols-md-2 g-3">
+        <div class="col-md-7">
+            <div class="container-fluid py-3">
+                <h4 class="mb-3 title-text">Facilities</h4>
+                <hr class="hr hr-blurry" />
+                <div class="row mb-0"> 
+                  {% for entry in venue_info[4] %}
+                    <div class="col-4">
+                        <p class="mb-0">● {{ entry }}</p>              
+                    </div>
+                  {% endfor %}
+                </div>
+            </div>
+            <div class="container-fluid py-3">
+                <h4 class="mb-3 title-text">Service Options</h4>
+                <hr class="hr hr-blurry" />
+                  {% for entry in venue_info[5] %}
+                    <p class="mb-0">● {{ entry }}</p>   
+                  {% endfor %}
+                
+            </div>
+            
+        </div>
+        <div class="col-md-5">
+          <div class="container-fluid py-3">
+              <h4 class="mb-3 title-text">Contact</h4>
+              <hr class="hr hr-blurry" />
+              <p class="mb-1">{{ venue_info[6] }}</p>
+              <p class="mb-1">{{ venue_info[7] }}</p>
+              <p class="mb-3">{{ venue_info[8] }}</p>
+              <a href="/message_venue?planner_id={{ venue_planner[9] }}" class="btn btn-primary mb-3">Message Venue</a>
+          </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+  <!-- 
+  space_list (a list of a list): 
+  name, cap, events, equipment, price, pricing_model   -->
+
+  <div class="container">
+    <!-- <h4 class="my-4 title-text text-center">Spaces</h4> -->
+   
+    <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th scope="col">Space</th>
+              <th scope="col">Capacity</th>
+              <th scope="col">Event Options</th>
+              <th scope="col">Equipment</th>
+              <th scope="col">Price</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody style="vertical-align: middle">
+            {% for space in space_list %}
+            <tr>
+
+              <td>{{ space[0] }}</td>
+              <td>{{ space[1] }}</td>
+              <td>{{ space[2] }}</td>
+              <td>{{ space[3] }}</td>
+              <td>
+                {% if space[4] == 'Free' %}
+                    {{ space[4] }}
+                    <div class="text-muted">*{{ space[5] }}</div>
+                {% else %}
+                    ${{ space[4] }} per hour
+                {% endif %}
+              </td>
+              <td>
+                <!--  -->
+                <a 
+                href= "{{ url_for('sign_in') }}"
+                class="btn btn-primary">
+                  Book Now
+                </a>
+
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
+  </div>
+
+
+{% endblock %}

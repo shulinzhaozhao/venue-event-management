@@ -1,0 +1,200 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Financial Report{% endblock %}
+
+{% block main %}
+
+<div class="subtitle">
+  <h3 class="py-2 text-dark title-text" style="margin-top: 30px; margin-left: 70px;">Financial Report</h3>
+</div>
+
+<hr>
+
+
+<div class="fin-report-table">
+  <!-- First section -->
+  <div class="row justify-content-between align-items-center">
+
+    <div class="col-3">
+      <p style="font-size: large; margin-bottom: 0; padding-top: 20px;"><strong>Year-to-Date Total Revenue</strong></p>
+      <p style="font-size: small; margin-top: 0; padding-top: 0;">From {{this_jan}} To {{this_month}}</p>
+    </div>
+
+    <div class="col-3">
+      <p class="number">${{formatted_year_to_date_total}}</p>
+    </div>
+
+    <div class="col-3">
+      <p style="font-size: large; margin-bottom: 0; padding-top: 20px;"><strong>Monthly Total Revenue</strong></p>
+      <p style="font-size: small; margin-top: 0; padding-top: 0;">{{this_month}}</p>
+    </div>
+
+    <div class="col-3">
+      <p class="number">${{formatted_this_month_total}}</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 2nd section -->
+
+  <div class="row">
+    <div class="col-6">
+      <p style="font-size: large; margin-bottom: 0; padding-top: 20px;"><strong>
+          Past 12 Months Performance</strong>
+      </p>
+    </div>
+
+    <div class="col-6">
+      <p style="font-size: large; margin-bottom: 0; padding-top: 20px;"><strong>
+          YTD by Venues</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- 3rd Row -->
+  <div class="row">
+    <div class="col-6">
+      <canvas id="allPaymentData" width="700" height="300"></canvas>
+      <script>
+        var ctx = document.getElementById('allPaymentData').getContext('2d');
+        var lineChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: {{ labels| safe}}, //retrun a list of string using |safe
+        datasets: [
+          {
+            label: 'Total Amount($NZD)',
+            data: {{ values | safe }},
+          fill: true,
+          borderColor: "rgb(32, 150, 80)",
+          lineTension: 0.5
+            }
+        ]
+        },
+        options: {
+          responsive: true,
+        }
+      });
+      </script>
+    </div>
+
+    <div class="col-6">
+      <canvas id="barChart" width="700" height="300"></canvas>
+      <script>
+        var ctx = document.getElementById('barChart').getContext('2d');
+        var lineChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: {{ venue_name_labels| safe}}, //retrun a list of string using |safe
+        datasets: [
+          {
+            label: 'Total Amount($NZD)',
+            data: {{ venue_total_revenue | safe }},
+          backgroundColor: [
+            'rgba(32, 150, 80, 0.7)',
+            'rgba(54, 162, 235, 0.7)',
+            'rgba(255, 99, 132, 0.7)',
+            'rgba(255, 206, 86, 0.7)',
+            'rgba(75, 192, 192, 0.7)',
+            'rgba(153, 102, 255, 0.7)',
+          ],
+          borderColor: [
+            'rgba(32, 150, 80, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+          ],
+
+          borderWidth: 1
+            }
+        ]
+        },
+        options: {
+          responsive: true,
+        }
+      });
+      </script>
+    </div>
+  </div>
+
+
+  <hr>
+
+
+  <!-- 4th Row -->
+<div class="row">
+  <div class="col-6">
+    <p style="font-size: large; margin-bottom: 0; padding-top: 20px;"><strong>
+      Year-to-Date Monthly Total Revenue</strong>
+  </p>
+  </div>
+
+  <div class="col-6">
+    <p style="font-size: large; margin-bottom: 0; padding-top: 20px;"><strong>
+      Comparison Between
+      YTD and the Year End Goal</strong>
+  </p>
+  </div>
+
+</div>
+
+  <!-- 5th Row -->
+  <div class="row">
+    <div class="col-6">
+      <canvas id="barChart0" width="700" height="300"></canvas>
+      <script>
+        var ctx = document.getElementById('barChart0').getContext('2d');
+        var barChart0 = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: {{ bar_chart_labels| safe}}, //retrun a list of string using |safe
+        datasets: [
+          {
+            label: 'Total Amount($NZD)',
+            data: {{ bar_chart_values | safe }},
+          backgroundColor: "pink",
+          lineTension: 0.5
+            }
+        ]
+        },
+        options: {
+          responsive: true,
+        }
+      });
+      </script>
+    </div>
+    
+    <div class="col-6">
+      <canvas id="horizonBarChart" width="700" max-height="300"></canvas>
+      <script>
+        var ctx = document.getElementById('horizonBarChart').getContext('2d');
+        var horizonBarChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: {{ year_to_date_vs_year_end_labels | safe }},
+        datasets: [
+          {
+            label: 'Amount($NZD)',
+            data: {{ year_to_date_vs_year_end_values | safe}},
+          backgroundColor: ['rgba(75, 192, 192, 0.8)', 'rgba(255, 99, 132, 0.5)'],
+          borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+          borderWidth: 1,
+          barPercentage: 0.5,
+          fill: true,
+          }
+        ]
+          },
+        options: {
+          responsive: true,
+            indexAxis: 'y',
+        }
+        });
+      </script>
+    </div>
+  </div>
+  
+
+  {% endblock %}

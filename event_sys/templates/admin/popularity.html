@@ -1,0 +1,84 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Popularity Report{% endblock %}
+
+{% block main %}
+
+<div class="subtitle">
+  <h3 class="py-2 text-dark title-text" style="margin-top: 30px; margin-left: 70px;">Popularity Report</h3>
+</div>
+
+<hr>
+<div class="pop-report" style="width: 80%;">
+  <div class="row">
+    <div class="col-6">
+      <p style="font-size: large; margin-bottom: 0; margin-left: 50px; padding-top: 20px;">
+        <strong>
+          The most popular venue: {{most_popular_venue}}
+        </strong>
+      </p>
+    </div>
+
+    <div class="col-6">
+      <p style="font-size: large; margin-bottom: 0; margin-left: 50px; padding-top: 20px;">
+        <strong>
+          The most popular venue space: {{most_popular_space}}
+        </strong>
+      </p>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <canvas id="pieChart" width="600" max-height="300"></canvas>
+      <script>
+        var ctx = document.getElementById('pieChart').getContext('2d');
+        var pieChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: {{ labels | safe }},
+        datasets: [
+          {
+            label: 'Venue',
+            data: {{ values | safe}},
+          backgroundColor: ["red", "orange", "yellow", "green", "cyan", "blue", "purple"],
+          borderWidth: 1,
+        }
+        ]
+        },
+        options: {
+          responsive: true,
+      }
+      });
+      </script>
+    </div>
+
+    <div class="col-6">
+      <canvas id="doughnutChart" width="700" max-height="300"></canvas>
+      <script>
+        var ctx = document.getElementById('doughnutChart').getContext('2d');
+        var doughnutChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: {{ space_labels | safe }},
+        datasets: [
+          {
+            label: 'Venue Spaces',
+            data: {{ space_values | safe}},
+          backgroundColor: ["red", "orange", "yellow", "green", "cyan", "blue", "purple"],
+          borderWidth: 1,
+        }
+        ]
+        },
+        options: {
+          responsive: true,
+      }
+      });
+      </script>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

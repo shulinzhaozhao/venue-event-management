@@ -1,0 +1,86 @@
+{% extends "customers/base.html" %}
+{% block title %}Customer Messages{% endblock %}
+{% block main %}
+<div class="container">
+  <h2>Customer Messages</h2>
+  <table class="table" style="table-layout: fixed; width: 100%;">
+    <colgroup>
+      <col style="width: 10%;"> <!-- Adjust the width percentage as needed -->
+      <col style="width: 20%;"> <!-- Adjust the width percentage as needed -->
+      <col style="width: 40%;"> <!-- Narrower Message column, adjust the width percentage as needed -->
+      <col style="width: 30%;"> <!-- Adjust the width percentage as needed -->
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Message Date</th>
+        <th>Subject</th>
+        <th>Message</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for message in messages %}
+      <tr>
+        <td>{{ message[1] }}</td>
+        <td>{{ message[2] }}</td>
+        <td>{{ message[3] }}</td>
+        <td>
+          <div class="row">
+            <div class="col-3">
+              <a href="/customer_message_details/{{ message[0] }}" class="btn btn-primary" style="width: 80px;">View</a>
+            </div>
+            <div class="col">
+              <form method="POST" action="/customer_messages">
+                <input type="hidden" name="delete_message_id" value="{{ message[0] }}">
+                <button type="button" class="btn btn-danger" style="width: 80px" onclick="confirmDelete({{ message[0] }})">Delete</button>
+              </form>
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+
+      <!-- Display the customer messages -->
+      {% for customer_message in customer_messages %}
+      <tr>
+        <td>{{ customer_message[1] }}</td>
+        <td>{{ customer_message[2] }}</td>
+        <td>{{ customer_message[3] }}</td>
+        <td>
+          <div class="row">
+            <div class="col-3">
+              <!-- <a href="/customer_message_details/{{ customer_message[0] }}" class="btn btn-primary" style="width: 80px;">View</a> -->
+            </div>
+            <div class="col">
+              <form method="POST" action="/customer_messages">
+                <input type="hidden" name="delete_message_id" value="{{ customer_message[0] }}">
+                <!-- <button type="button" class="btn btn-danger" style="width: 80px" onclick="confirmDelete({{ customer_message[0] }})">Delete</button> -->
+              </form>
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Back button to navigate to the customer dashboard -->
+  <a href="/customer/dashboard" class="btn btn-secondary">Back</a>
+</div>
+
+<script>
+  function confirmDelete(messageId) {
+    if (confirm("Are you sure you want to delete this message?")) {
+      // If the user confirms, submit the form
+      document.querySelector(`form input[name="delete_message_id"][value="${messageId}"]`).form.submit();
+    }
+  }
+</script>
+{% endblock %}
+
+
+
+
+
+
+

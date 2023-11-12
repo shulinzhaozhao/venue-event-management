@@ -1,0 +1,186 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Individual Venue Page{% endblock %}
+
+{% block main %}
+
+<div class="container">
+  
+  <!-- Venue Information Form -->
+  <form method="POST" action="/admin/manage_venues/{{ venue_id }}/edit-venue" enctype="multipart/form-data">
+    <div class="row row-cols-1 row-cols-md-2 g-3">
+      <div class="col-md-7">
+        <h3 class="text-uppercase pb-1 mt-3 mb-1 title-text">
+          <input type="text" name="venue_name" value="{{ venue_info[0] }}">
+        </h3>
+        <h5 class="text-muted mb-4">
+          <input type="text" name="city" value="{{ venue_info[1] }}">
+        </h5>
+        <p class="me-4">
+          <textarea name="description" rows="8" cols="50">{{ venue_info[3] }}</textarea>
+        </p>
+      </div>
+      <div class="col-md-5">
+        <div id="gallery-carousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {% for entry in venue_info[2] %}
+              <div class="carousel-item active">
+                <img src="{{ url_for('static', filename = entry) }}" class="d-block w-100" alt="image">
+              </div>
+            {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#gallery-carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#gallery-carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
+        <!-- A new form to edit photos -->
+        <!-- <form method="POST" action="/planner/my_venues/{{ venue_id }}/edit-photo">
+          <div class="mt-3">
+              <input type="file" name="new_images" multiple accept="image/*">
+              <p></p>
+              <button type="submit" class="btn btn-primary">Save Photos</button>
+          </div>
+
+      </form> -->
+
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Venue Information</button>
+  </form>
+
+  <!-- Contact Information Form -->
+  <form method="POST" action="/admin/manage_venues/{{ venue_id }}/edit-contact" enctype="multipart/form-data">
+    
+    <div class="container py-3">
+      <h4 class="mb-3 title-text">Contact</h4>
+      <hr class="hr hr-blurry" />
+      <input type="text" name="contact_phone" value="{{ venue_info[6] }}">
+      <input type="text" name="contact_email" value="{{ venue_info[7] }}">
+      <input type="text" name="address" value="{{ venue_info[8] }}" size="50">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Contact Information</button>
+  </form>
+
+  <!-- Facilities Form -->
+  <form method="POST" action="/admin/manage_venues/{{ venue_id }}/edit-facilities" enctype="multipart/form-data">
+    <div class="container-fluid py-3">
+      <h4 class="mb-3 title-text">Facilities</h4>
+      <hr class="hr hr-blurry" />
+      <div class="row mb-0">
+        {% for entry in venue_info[4] %}
+          <div class="col-4">
+            <p class="mb-0">
+              <input type="text" name="facilities[]" value="{{ entry }}">
+            </p>
+          </div>
+        {% endfor %}
+      </div>
+      <!-- Empty input box (no value attribute) -->
+      <p class="mb-0">
+        <input type="text" name="facilities[]">
+      </p>
+    </div> 
+    <button type="submit" class="btn btn-primary">Save Facilities Information</button>
+  </form>
+
+  <!-- Service Options Form -->
+  <form method="POST" action="/admin/manage_venues/{{ venue_id }}/edit-services" enctype="multipart/form-data">
+    <div class="container py-3">
+      <h4 class="mb-3 title-text">Service Options</h4>
+      <hr class="hr hr-blurry" />
+    <p>Note: Pricing model for Catering is Per Head. All the other options are fixed price. </p>
+
+    {% for service in complete_service_list %} <!-- list of tuples with id, name, and price  -->
+      <div class="row">
+        <div class="col-6">
+          <div class="form-check">
+            <input type="checkbox" name="new_service_option[]" value="{{ service[0] }}"
+            {% if service[2] is not none %} 
+                checked disabled
+            {% endif %}>  <!-- if price exists, meaning this is an existing service, pre-check it -->
+            
+            <label class="form-check-label">{{ service[1] }}</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <input type="hidden" name="selected_service_list[]" value="{{ service[0] }}"> <!-- pass out service id as a hidden field -->
+          <input type="number" name="selected_service_list[]" value='{{ service[2] }}' step = 1 min = 10 max = 1000 
+            {% if service[2] is not none %}
+                required
+              {% endif %}>  <!-- if price exists, makes it a required field -->
+  
+        </div>
+      </div>
+  
+    {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Save Service Options</button>
+  </form>
+
+
+  <!-- Space Information Form -->
+  <form method="POST" action="/admin/manage_venues/{{ venue_id }}/edit-spaces" enctype="multipart/form-data">
+    
+    <div class="container">
+      <h4 class="my-4 title-text text-center">Venue Spaces</h4>
+      <div class="table-responsive">
+          <table class="table table-hover">
+              <thead>
+                  <tr class="table-secondary">
+                      <th scope="col">Space Name</th>
+                      <th scope="col">Capacity</th>
+                      <th scope="col">Event Options</th>
+                      <th scope="col">Equipment</th>
+                      <th scope="col">Price (per hour)</th>
+                  </tr>
+              </thead>
+              <tbody style="vertical-align: middle">
+                  {% for space in space_list %}
+                      <tr>
+                          <td>
+                            <!-- space_name and space_id  -->
+                             <input type="text" name="space_name" value="{{ space[0] }}" required> 
+                           
+                              <input type="hidden" name="space_id" value = "{{ space[6] }}">
+                            </td>
+                          <td>
+                            <!-- max_capacity -->
+                            <input type="number" name="max_capacity" value="{{ space[1] }}" min="5" max="500" required>
+                          </td>
+                          <td>
+                            <!-- event types: space_event_options[] -->
+                              <div class="form-check">
+                                  {% for event_type in event_type_list %}                   
+                                      <input type="checkbox" name="space_event_options[]" value="{{ event_type[0] }}"
+                                      {% if event_type[1] in space[2] %} checked disabled {% endif %}>
+                                      <label class="form-check-label" for="{{ event_type[0] }}">{{ event_type[1] }}</label><br>
+                                  {% endfor %}
+                              </div>
+                          </td>
+                          <td>
+                            <!-- equipment -->
+                              <input type="text" name="equipment" value="{{ space[3] }}" required>
+                          </td>
+                          <td>
+                            <!-- price -->
+                            <input type="number" name="price" value="{{ space[4] }}" step="1" pattern="[0-9]*" required>
+                          </td>
+                      </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Save Space Information</button>
+</form>
+
+</div>
+
+{% endblock %}

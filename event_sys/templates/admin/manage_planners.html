@@ -1,0 +1,64 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Planners{% endblock %}
+
+{% block main %}
+<div class="wide-container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="subtitle">
+        <h2 class="subtitle">Planner List</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-container" style="text-align: left;">
+    <form action="{{ url_for('view_manage_planners') }}" method="GET" class="form-inline">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="search_query" placeholder="Search for planners">
+            <button type="submit" class="btn btn-outline-primary">
+              Search
+            </button>
+        </div>
+    </form>
+  </div>
+
+  <!-- Display the search query -->
+  <p>Search results for: {{ search_query }}</p>
+
+  <table class="table table-bordered text-center table-hover">
+    <thead>
+      <tr class="bg-light-gray text-uppercase">
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for planner in planners %}
+        <tr>
+          <td>{{ planner[1] }}</td>
+          <td>{{ planner[2] }}</td>
+          <td>{{ planner[3] }}</td>
+          <td>{{ planner[4] }}</td>
+          <td>{{ planner[5] }}</td>
+          <td>
+            <a href="/admin/update_planner/{{ planner[0] }}" class="btn btn-primary">Update</a>
+            <a href="/admin/delete_planner/{{ planner[0] }}" class="btn btn-outline-primary" onclick="return confirm('Are you sure you want to delete this planner?')">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Move the "Add Planner" button below the table -->
+  <div class="custom-container" style="text-align: left;">
+    <a href="/admin/add_planner" class="btn btn-primary">Add Planner</a>
+  </div>
+</div>
+{% endblock %}
+
+

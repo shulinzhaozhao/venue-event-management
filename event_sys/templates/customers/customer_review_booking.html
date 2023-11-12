@@ -1,0 +1,216 @@
+{% extends "customers/base.html" %}
+
+{% block title %}Individual Venue Page{% endblock %}
+
+{% block main %}
+<!-- Test  Code - Don't delete -->
+<!-- {{booking_data}}
+<hr>
+{{venue_info}} -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // calculate venue fee
+        var venueFee = {{(booking_data[8][2]) | int * booking_data[8][3]}};
+        var totalVenueFee = venueFee;
+        document.getElementById('venue_fee').innerHTML = formatCurrency(totalVenueFee);
+
+        // calculate and display total service fee
+        var totalServiceFee = 0;
+        {% for service in booking_data[9] %}
+        {% if service[3] == "PerHead" %}
+            var fee = {{ service[2] }} * {{ booking_data[7] | int }}
+        {% else %}
+            fee = {{ service[2] }}
+        {% endif %};
+        totalServiceFee += fee;
+
+        var formattedFee = formatCurrency(totalServiceFee);
+        document.getElementById('total_service_fee').innerHTML = formattedFee;
+    {% endfor %}
+
+        // Update total
+        var total = totalVenueFee + totalServiceFee;
+        document.getElementById('total_fee').innerHTML = formatCurrency(total);
+        document.getElementById('total_fee_input').value = total;
+
+        // Concatenate service IDs and set as a hidden input value
+        var allServiceIds = "";
+        {% for service_tuple in booking_data[9] %}
+            allServiceIds += "," + "{{ service_tuple[0] }}";
+        {% endfor %}
+        allServiceIds = allServiceIds.slice(1); // Remove the leading comma
+
+        // Set the value of the hidden input
+        document.getElementById('all_service_ids_input').value = allServiceIds;
+    });
+
+    // Helper function to format currency
+    function formatCurrency(amount) {
+        return "<strong>$" + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</strong>";
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+    // ... Your existing JavaScript code ...
+
+    // Add event listener to the form
+    document.getElementById('confirmBookingForm').addEventListener('submit', function (event) {
+        // Check if the cancellation policy checkbox is checked
+        if (!document.getElementById('cancellation_policy').checked) {
+            alert('Please agree to the cancellation policy before submitting.');
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+     // Add event listener to the view policy link
+     document.getElementById('viewPolicyLink').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default behavior of the link
+
+        // Display a pop-up box with the cancellation and refund policy
+        var policyContent = `
+
+Cancellation and Refund Policy
+
+In the event of cancellation, refunds will be provided based on the following schedule:
+
+Cancellation 30 or more days prior to the event: 100% refund
+Cancellation 15-29 days prior to the event: 50% refund
+Cancellation within 14 days of the event: No refund
+
+Please read and agree to our cancellation and refund policy before proceeding with the booking.
+
+        `;
+
+        alert(policyContent);
+    });
+});
+</script>
+<style>
+    .form-check-label {
+        white-space: nowrap;
+    }
+</style>
+<style>
+    .form-check-label {
+        white-space: nowrap;
+        margin-top: 10px; /* Adjust the top margin as needed */
+        margin-bottom: 10px; /* Adjust the bottom margin as needed */
+    }
+</style>
+<style>
+    .form-check-input {
+        margin-top: 10px; /* Adjust the top margin as needed */
+        margin-bottom: 10px; /* Adjust the bottom margin as needed */
+    }
+</style>
+
+
+
+<div class="container" style="margin-top: 200px;">
+    <h3 class="text-dark title-text mb-5">Booking Details</h3>
+
+    <ul class="list-group mb-3">
+        <!-- venue fee section -->
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+                <h6 class="my-0">Venue</h6>
+                <small class="text-body-secondary">
+                    {{booking_data[5][1]}} @ {{booking_data[4][1]}}<br>
+                    {{venue_info[-1]}}<br>
+                    <ul>
+                        <li>Event Type: {{booking_data[6][1]}}</li>
+                        <li>Number of Guests: {{booking_data[7]}} </li>
+                        <li>FROM {{booking_data[8][0]}}</li>
+                        <li>TO {{booking_data[8][1]}}</li>
+                    </ul>
+                </small>
+            </div>
+            <span class="text-body-secondary" id="venue_fee">
+                *** Daily rate cap at 6 hours
+            </span>
+        </li>
+
+        <!-- Add on service fee section -->
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+                <h6 class="my-0">Add On Services</h6>
+                <small class="text-body-secondary">
+                    {% for service in booking_data[9] %}
+                    <ul>
+                        <li>{{service[1]}}</li>
+                    </ul>
+                    {% endfor %}
+                </small>
+            </div>
+            <span class="text-body-secondary" id="total_service_fee"></span>
+        </li>
+
+
+        <!-- Additional INfo -->
+        <!-- <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+                <h6 class="my-0">Additional Information</h6>
+                <small class="text-body-secondary">
+                    <ul>
+                        <li>Event Type: </li>
+                    </ul>
+                </small>
+            </div>
+
+        </li> -->
+
+        <!-- Total fee section -->
+
+        <li class="list-group-item d-flex justify-content-between">
+            <span>Total (NZD)</span>
+            <span id="total_fee"></span>
+        </li>
+    </ul>
+
+    <form class="col-12" action="/customer/process-booking" method="POST" id="confirmBookingForm">
+<!--     
+    Original template 
+    <form id="paymentForm" class="col-12" action="/customer/show_reminder" method="POST"> -->
+
+        <div class="col-md-4">
+            <!-- user_id,#0
+            booking_date_time, #1
+           status, #2
+            refund, #3
+            (venue_id, venue_name), #4
+            (space_id, space_name), #5
+            (event_id, event_type), #6
+            number_of_guests, #7
+            (start_str, end_str, total_hours, venue_hourly_rate), #8
+            add_on_services, #9
+            space_event_id #10 -->
+
+            
+
+            <input type="hidden" name="total_fee" id="total_fee_input", value="">
+            <input type="hidden" name="user_id" value="{{ booking_data[0]}}">
+            <input type="hidden" name="booking_date_time" value="{{ booking_data[1] }}">
+            <input type="hidden" name="status" value="{{ booking_data[2] }}">
+            <input type="hidden" name="refund" value="{{ booking_data[3]}}">
+            <input type="hidden" name="venue_id" value="{{ booking_data[4][0] }}">
+            <input type="hidden" name="venue_name" value="{{ booking_data[4][1] }}">
+            <input type="hidden" name="space_id" value="{{ booking_data[5][0] }}">
+            <input type="hidden" name="space_name" value="{{ booking_data[5][1] }}">
+            <input type="hidden" name="event_id" value="{{ booking_data[6][0] }}">
+            <input type="hidden" name="event_type" value="{{ booking_data[6][1] }}">
+            <input type="hidden" name="number_of_guests" value="{{ booking_data[7] }}"> 
+            <input type="hidden" name="start_str" value="{{ booking_data[8][0] }}"> 
+            <input type="hidden" name="end_str" value="{{ booking_data[8][1] }}"> 
+            <input type="hidden" name="all_service_ids" id="all_service_ids_input" value="">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="cancellation_policy" name="cancellation_policy">
+                <label class="form-check-label" for="cancellation_policy">
+                    I agree to the <a href="#" id="viewPolicyLink">cancellation and refund policy</a>
+                </label>
+            </div>            
+            
+            <button type="submit" class="btn btn-primary">Confirm and Pay</button>
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}

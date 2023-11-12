@@ -1,0 +1,46 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Admin Manage Venues{% endblock %}
+
+{% block main %}
+
+<!-- {{ venue_list }}  -->
+<!-- including venue names, descriptions, first image_url, event types -->
+
+<div class="container">
+    <h3 class="py-2 text-dark title-text" style="display: inline;">Venue List</h3>
+    <!-- Add a Venue Button right after the title -->
+    <!-- <a href="/admin/manage_venues/add" class="btn btn-primary" style="margin-left: 10px;">Add a Venue</a>
+    <p></p> -->
+
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for venue in venue_list %}
+        <div class="col">
+            <div class="card h-100">
+                <img class='card-img-top' src="{{ url_for('static', filename = venue[2] ) }}"  alt="venue img"> 
+                <div class="card-body">
+                    
+                    <a href="/admin/all_venues/{{ venue[-1] }}">
+                        <h5 class="card-title py-2 title-text">{{ venue[0] }}</h5>
+                    </a>
+                    <p class="card-text">
+                        {{ venue[1] }}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    {% for event_type in venue[3] %}
+                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" disabled>{{ event_type }} </button>
+                    {% endfor %}
+                    
+                </div>
+                <!-- Edit and Delete This Venue Button -->
+                <a href="/admin/manage_venues/{{ venue[-1] }}/edit-venue" class="btn btn-primary" >Update This Venue</a>
+                <a href="/admin/manage_venues/{{ venue[-1] }}/delete" class="btn btn-outline-primary" onclick="return confirm('Are you sure you want to delete this venue?')">Delete This Venue</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

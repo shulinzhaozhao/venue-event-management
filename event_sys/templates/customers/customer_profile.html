@@ -1,0 +1,97 @@
+{% extends "customers/base.html" %}
+
+{% block title %}Customers Profile{% endblock %}
+
+<!-- Name (Title, First Name, Family Name), Position, Phone Number, Email.  -->
+
+{% block main %}
+
+<!-- 
+<div class="custom-container">
+    <div class="row text-align-center">
+        <div class="subtitle col-md-12">
+            <h2 class="subtitle title-text">Your Profile</h1>
+            <p>Edit your profile information below:</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="display: flex; justify-content: left;">
+            <div class="card">
+                <div class="card-body" style="width: 400px">
+                    <form action="/customers/profile/update" method="post">
+                       
+                        <div class="mb-3">
+                            <label for="first_name" class="form-label"><span style="color: red;">*</span>First Name:</label>
+                            <input type="text" id="first_name" name="first_name" class="form-control" value="{{ account[1] }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="last_name" class="form-label"><span style="color: red;">*</span>Last Name:</label>
+                            <input type="text" id="last_name" name="last_name" class="form-control" value="{{ account[2] }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label"><span style="color: red;">*</span>Email:</label>
+                            <input type="email" id="email" name="email" class="form-control" value="{{ account[3] }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="contact_number" class="form-label"><span style="color: red;">*</span>Contact Number:</label>
+                            <input type="tel" id="contact_number" name="contact_number" class="form-control" value="{{ account[4] }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="address" class="form-label"><span style="color: red;">*</span>Address:</label>
+                            <input type="text" id="address" name="address" class="form-control" value="{{ account[5] }}" required>
+                        </div>
+
+                        <button type="submit" class="save-btn btn dark-button">Save Profile</button>
+                    </form>
+                    {% if msg %}
+                        <div class="alert alert-info mt-3">{{ msg }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<div class="container">
+    <h3 class="text-dark title-text mb-2">Your Profile</h3>
+    <p class="mb-5">Edit your profile information below:</p>
+    <form class="row g-3" action="/customers/profile/update" method="post">
+        <div class="col-md-6">
+          <label for="first_name" class="form-label"><span style="color: red;">*</span>First Name:</label>
+          <input type="text" id="first_name" name="first_name" class="form-control" value="{{ account[1] }}" required>
+        </div>
+        <div class="col-md-6">
+            <label for="last_name" class="form-label"><span style="color: red;">*</span>Last Name:</label>
+            <input type="text" id="last_name" name="last_name" class="form-control" value="{{ account[2] }}" required>
+        </div>
+        <div class="col-md-6">
+            <label for="email" class="form-label"><span style="color: red;">*</span>Email:</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ account[3] }}" required>
+        </div>
+        <div class="col-md-6">
+            <label for="contact_number" class="form-label"><span style="color: red;">*</span>Contact Number:</label>
+            <input type="tel" id="contact_number" name="contact_number" class="form-control" value="{{ account[4] }}" required>
+        </div>
+        <div class="col-md-12">
+            <label for="address" class="form-label"><span style="color: red;">*</span>Address:</label>
+            <input type="text" id="address" name="address" class="form-control" value="{{ account[5] }}" required>
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Save profile</button>
+        </div>
+      </form>
+      {% if msg %}
+        <div class="alert alert-info mt-3">{{ msg }}</div>
+    {% endif %}
+</div>
+
+
+
+
+{% endblock %}

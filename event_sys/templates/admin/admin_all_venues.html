@@ -1,0 +1,81 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Venue List{% endblock %}
+
+{% block main %}
+
+<!-- {{ venue_list }} -->
+<!-- including venue names, descriptions, first image_url, event types -->
+
+<div class="container">
+    <div class="container-fluid">
+        <div class="row py-5">
+          <div class="col-12 col-md-3 align-self-center text-center text-md-start">
+            <h3 class="text-dark title-text">Venue List</h3>
+          </div>
+          
+          <div class="col-12 col-md-9 mt-auto">
+            <form action='/search_venues' method="post"> 
+            <div class="row g-1">
+            <div class="col">
+              
+                <select class="form-control" id="event-type" name="event-type" required>
+                  <option value="" selected disabled>Select an event</option>
+                  {% for entry in event_type_list %}
+                  <option value="{{ entry[0] }}">{{ entry[0] }}</option>
+                  {% endfor %}
+                </select>
+            
+          </div>
+          <div class="col">
+            
+              <select class="form-control" id="location" name="location" required>
+                <option value="" selected disabled>Select a location</option>
+                {% for entry in location_list %}
+                <option value="{{ entry[0] }}">{{ entry[0] }}</option>
+                {% endfor %}
+              </select>
+        
+          </div>
+          <div class="col">
+            
+              <input type="number" class="form-control" id="guests" name="guests" placeholder="Number of guests" 
+              min="5" max="500" step="1" required>
+         
+          </div>
+          <div class="col-1">
+            <button type="submit" class="btn btn-outline-primary">
+              Filter
+            </button>
+          </div>
+          </div>
+        </form>  
+        </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for venue in venue_list %}
+        <div class="col">
+            <div class="card h-100">
+                <img class='card-img-top' src="{{ url_for('static', filename = venue[2] ) }}"  alt="test img">
+                <div class="card-body">
+                    <a href="/admin/all_venues/{{ venue[-1] }}">
+                        <h5 class="card-title py-2 title-text">{{ venue[0] }}</h5>
+                    </a>
+                    <p class="card-text">
+                        {{ venue[1] }}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    {% for event_type in venue[3] %}
+                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" disabled>{{ event_type }} </button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

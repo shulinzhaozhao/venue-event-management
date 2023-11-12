@@ -1,0 +1,60 @@
+{% extends "planners/base.html" %}
+
+<!-- booking:
+payment.booking_id, 
+payment.payment_amount,
+bookings.refund_amount,
+
+customers.first_name,
+customers.last_name, 
+users.username, 
+
+event_types.event_name,
+venue_spaces.space_name,
+venues.venue_name -->
+
+{% block title %}Refund Process{% endblock %}
+
+{% block main %}
+    <div class="wide-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="subtitle">
+                    <h3 class="py-2 text-dark title-text">Refunds In Progress</h3>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-bordered text-center table-hover">
+            <thead>
+                <tr class="bg-light-gray text-uppercase">
+                    <th style="vertical-align: top;">Customer</th>
+                    <th style="vertical-align: top;">Venue and Space</th>
+                    <th style="vertical-align: top;">Event Type</th>
+                    <th style="vertical-align: top;">Payment Made</th>
+                    <th style="vertical-align: top;">Refund Amount</th>
+                    <th style="vertical-align: top;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <!-- {% if booking[14] != 0.0 %} -->
+                        <tr>
+                            <td>{{ booking[3] }} {{ booking[4] }}</td>
+                            <td>{{ booking[-2] }}, {{ booking[-1] }}</td>
+                            <td>{{ booking[-3] }}</td>
+                            <td>{{ booking[1] }}</td>
+                            <td>{{ booking[2] }}</td>
+                            <td>
+                                <!-- Add a form with a button to process the refund -->
+                                <form action="{{ url_for('process_refund', booking_id=booking[0],refund_amount=booking[2]) }}" method="post">
+                                    <button type="submit" class="btn btn-primary">Process Refund</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

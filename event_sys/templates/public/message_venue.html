@@ -1,0 +1,49 @@
+{% extends "public/base.html" %}
+{% block title %}Message Venue{% endblock %}
+{% block main %}
+<div class="container">
+  <h2>Message Venue</h2>
+  <form action="/message_venue" method="post">
+
+    <!-- Add a hidden input field for planner_id -->
+    <input type="hidden" name="planner_id" value="{{ planner_id }}">
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Name<span class="required-asterisk">*</span></label>
+      <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email<span class="required-asterisk">*</span></label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <label for="phone" class="form-label">Phone<span class="required-asterisk">*</span></label>
+        <input type="text" class="form-control" id="phone" name="phone" required>
+      </div>
+      <div class="col">
+        <label for="event_date" class="form-label">Event Date<span class="required-asterisk">*</span></label>
+        <input type="date" class="form-control" id="event_date" name="event_date" min="{{ current_date }}" required>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="message" class="form-label">Message<span class="required-asterisk">*</span></label>
+      <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+    </div>
+    <div class="row mb-3">
+      <div class="col text-start">
+        <a href="javascript:window.history.back()" class="btn btn-secondary">Back</a>
+      </div>
+      <div class="col text-end">
+        <button type="submit" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+
+
+
+  
