@@ -56,14 +56,15 @@ The project entailed the development of a `full-stack web application` that util
 
 pending 
 
-- Overall: /100
-- Peer Review Assessment: /100
-- Project Report: /100
-- Source Code Marks: /100
+- Overall: 81.43/100
+- Peer Review Assessment: 84.00/100
+- Project Report: 94.00/100
+- Source Code Marks: 78.00/100
 
 **Examiner's feedback on source code**
 
-pending
+<img width="981" alt="截屏2023-11-13 22 01 27" src="https://github.com/shulinzhaozhao/venue-event-management/assets/125878823/5d8ef998-3e33-4034-b744-7f7b8673e2fa">
+
 
 ## :pray: Collaborators
 - @fangxin-tang
